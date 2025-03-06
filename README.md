@@ -1,7 +1,9 @@
+
+-- Criando a interface de usuário
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = game.Players.LocalPlayer.PlayerGui
 
--- Criando um Frame para a interface
+-- Criando o Frame principal
 local MainFrame = Instance.new("Frame")
 MainFrame.Parent = ScreenGui
 MainFrame.Size = UDim2.new(0, 400, 0, 300)
@@ -12,7 +14,7 @@ MainFrame.UICornerRadius = UDim.new(0, 12)
 MainFrame.UIStroke.Color = Color3.fromRGB(0, 255, 0)
 MainFrame.UIStroke.Thickness = 2
 
--- Criar um texto para o título
+-- Criando o título
 local Title = Instance.new("TextLabel")
 Title.Parent = MainFrame
 Title.Size = UDim2.new(1, 0, 0, 40)
@@ -24,7 +26,7 @@ Title.Font = Enum.Font.SourceSans
 Title.TextStrokeTransparency = 0.8
 Title.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
 
--- Divisão de cores no fundo (verde e roxo)
+-- Divisão de fundo em cores verde e roxo
 local LeftSide = Instance.new("Frame")
 LeftSide.Parent = MainFrame
 LeftSide.Size = UDim2.new(0.5, 0, 1, 0)
@@ -40,7 +42,7 @@ RightSide.BackgroundColor3 = Color3.fromRGB(128, 0, 128)
 RightSide.BorderSizePixel = 0
 RightSide.UICornerRadius = UDim.new(0, 12)
 
--- Caixa de texto para o código
+-- Caixa de texto para digitar o código Lua
 local CodeBox = Instance.new("TextBox")
 CodeBox.Parent = MainFrame
 CodeBox.Size = UDim2.new(1, -20, 0, 150)
@@ -70,16 +72,29 @@ ExecuteButton.UICornerRadius = UDim.new(0, 8)
 ExecuteButton.UIStroke.Color = Color3.fromRGB(0, 255, 0)
 ExecuteButton.UIStroke.Thickness = 2
 
--- Função para executar o código Lua quando pressionado o botão
+-- Adicionando feedback visual para erros
+local FeedbackLabel = Instance.new("TextLabel")
+FeedbackLabel.Parent = MainFrame
+FeedbackLabel.Size = UDim2.new(1, -20, 0, 40)
+FeedbackLabel.Position = UDim2.new(0, 10, 0, 260)
+FeedbackLabel.Text = ""
+FeedbackLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+FeedbackLabel.TextScaled = true
+FeedbackLabel.Font = Enum.Font.SourceSans
+FeedbackLabel.BackgroundTransparency = 1
+
+-- Função para executar o código Lua
 ExecuteButton.MouseButton1Click:Connect(function()
     local code = CodeBox.Text
     local success, result = pcall(function()
-        return loadstring(code)() -- Executa o código Lua digitado
+        return loadstring(code)() -- Executa o código Lua
     end)
 
     if success then
-        print("Código Executado com Sucesso!")
+        FeedbackLabel.Text = "Código Executado com Sucesso!"
+        FeedbackLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
     else
-        print("Erro ao executar o código: " .. result)
+        FeedbackLabel.Text = "Erro ao executar o código: " .. result
+        FeedbackLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
     end
 end)
